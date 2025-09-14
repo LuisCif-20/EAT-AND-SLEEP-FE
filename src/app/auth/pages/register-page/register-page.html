@@ -1,0 +1,141 @@
+<div class="flex h-full items-center justify-center pt-5">
+  <div
+    class="max-sm:portrait:w-full w-[640px] bg-surface-0 dark:bg-surface-900 rounded-xl p-5 flex flex-col overflow-y-auto max-sm:portrait:h-[600px] max-h-full"
+  >
+    <h1 class="text-3xl font-bold mx-auto my-5">Registrate</h1>
+    <form class="grid grid-cols-12 gap-5 mb-5" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="flex flex-col gap-2 max-sm:portrait:col-span-12 col-span-4">
+        <label for="name" [ngClass]="{ 'text-red-500': isInvalid('name') }">Nombre</label>
+        <input
+          pInputText
+          type="text"
+          id="name"
+          placeholder="Nick"
+          formControlName="name"
+          [invalid]="isInvalid('name')"
+        />
+        @if (isInvalid('name')) {
+          <p-message severity="error" size="small" variant="simple"
+            >El nombre es obligatorio</p-message
+          >
+        }
+      </div>
+      <div class="flex flex-col gap-2 max-sm:portrait:col-span-12 col-span-4">
+        <label for="birthDate" [ngClass]="{ 'text-red-500': isInvalid('birthDate') }"
+          >Nacimiento</label
+        >
+        <p-datepicker
+          [showIcon]="true"
+          inputId="birthDate"
+          [showOnFocus]="false"
+          placeholder="MM/DD/AAAA"
+          [maxDate]="maxDate"
+          formControlName="birthDate"
+        />
+        @if (isInvalid('birthDate')) {
+          <p-message severity="error" size="small" variant="simple"
+            >La fecha de nacimiento es obligatoria</p-message
+          >
+        }
+      </div>
+      <div class="flex flex-col gap-2 max-sm:portrait:col-span-12 col-span-4">
+        <label for="nit" [ngClass]="{ 'text-red-500': isInvalid('nit') }">NIT</label>
+        <p-inputmask
+          mask="9999999-9"
+          inputId="nit"
+          placeholder="0000000-0"
+          formControlName="nit"
+          [unmask]="true"
+        />
+        @if (isInvalid('nit')) {
+          <p-message severity="error" size="small" variant="simple"
+            >El nit es obligatorio</p-message
+          >
+        }
+      </div>
+      <div class="flex flex-col gap-2 max-sm:portrait:col-span-12 col-span-4">
+        <label for="phoneNumber" [ngClass]="{ 'text-red-500': isInvalid('phoneNumber') }"
+          >Telefono</label
+        >
+        <p-inputmask
+          mask="9999-9999"
+          inputId="phoneNumber"
+          placeholder="0000-0000"
+          formControlName="phoneNumber"
+          [unmask]="true"
+        />
+        @if (isInvalid('phoneNumber')) {
+          <p-message severity="error" size="small" variant="simple"
+            >El numero de telefono es obligatorio</p-message
+          >
+        }
+      </div>
+      <div class="max-sm:hidden col-span-8"></div>
+      <div class="flex flex-col gap-2 max-sm:portrait:col-span-12 col-span-4">
+        <label for="email" [ngClass]="{ 'text-red-500': isInvalid('email') }">Email</label>
+        <input
+          pInputText
+          type="text"
+          id="email"
+          placeholder="nick@example.com"
+          formControlName="email"
+        />
+        @if (isInvalid('email')) {
+          <p-message severity="error" size="small" variant="simple"
+            >El email es obligatorio</p-message
+          >
+        }
+      </div>
+      <div class="flex flex-col gap-2 max-sm:portrait:col-span-12 col-span-4">
+        <label for="password" [ngClass]="{ 'text-red-500': isInvalid('password') }"
+          >Contraseña</label
+        >
+        <p-password
+          inputId="password"
+          toggleMask
+          placeholder="••••••••"
+          formControlName="password"
+        />
+        @if (isInvalid('password')) {
+          <p-message severity="error" size="small" variant="simple">
+            La contraseña es obligatoria</p-message
+          >
+        }
+      </div>
+      <div class="flex flex-col gap-2 max-sm:portrait:col-span-12 col-span-4">
+        <label for="confirmPassword" [ngClass]="{ 'text-red-500': isPasswordMismatch() }">
+          Confirmar</label
+        >
+        <p-password
+          inputId="confirmPassword"
+          [feedback]="false"
+          toggleMask
+          placeholder="••••••••"
+          formControlName="confirm"
+          [invalid]="isPasswordMismatch()"
+        />
+        @if (isPasswordMismatch()) {
+          <p-message severity="error" size="small" variant="simple">
+            Las contraseñas no coincicedn
+          </p-message>
+        }
+      </div>
+      <button
+        pButton
+        rounded
+        severity="success"
+        class="max-sm:portrait:col-span-12 col-span-4 col-start-5"
+        type="submit"
+        [disabled]="isButtonDisable()"
+      >
+        <i class="pi pi-sign-up"></i>
+        <span>Registrate</span>
+      </button>
+    </form>
+    <p-divider />
+    <div class="flex flex-row items-center ml-auto">
+      <span>¿Ya tienes cuenta?</span>
+      <p-button link label="Inicia Sesión" routerLink="/auth" />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="flex flex-row h-screen p-0 md:p-3">
+  <app-sidebar [open]="open()" (hide)="open.set(false)" />
+  <div class="flex-1 flex flex-col md:pl-3">
+    <app-menubar (show)="open.set(true)" />
+    <div class="flex-1 pt-3 max-sm:px-3">
+      <router-outlet />
+    </div>
+  </div>
+</div>

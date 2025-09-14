@@ -1,0 +1,24 @@
+.auth-background {
+  background: linear-gradient(
+    135deg,
+    rgba(128, 0, 32, 0.9),
+    rgba(25, 25, 112, 0.9),
+    rgba(184, 134, 11, 0.85)
+  );
+  background-size: 400% 400%;
+  animation: gradientFlow 15s ease infinite;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

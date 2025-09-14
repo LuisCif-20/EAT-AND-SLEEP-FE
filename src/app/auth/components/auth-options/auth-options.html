@@ -1,0 +1,34 @@
+<div class="flex flex-row items-center">
+  @if (!userAccount()) {
+    <a pButton severity="secondary" text rounded class="ml-1" routerLink="/auth">
+      <i pButtonIcon class="pi pi-sign-in"></i>
+      <span pButtonLabel class="max-sm:hidden">Iniciar sesión</span>
+    </a>
+    <a pButton severity="secondary" text rounded class="ml-1" routerLink="/auth/register">
+      <i pButtonIcon class="pi pi-user-plus"></i>
+      <span pButtonLabel class="max-sm:hidden">Registrate</span>
+    </a>
+  } @else {
+    <a pButton severity="secondary" text rounded class="ml-1" routerLink="/profile">
+      @if (userAccount()!.avatar) {
+        <div class="relative rounded-full h-[32px] w-[32px] overflow-hidden">
+          <img [ngSrc]="userAccount()!.avatar! | imageUrl" alt="Avatar" fill />
+        </div>
+      } @else {
+        <i pButtonIcon class="pi pi-user"></i>
+      }
+      <span pButtonLabel class="max-sm:hidden">Mi perfil</span>
+    </a>
+    <p-button
+      severity="secondary"
+      text
+      rounded
+      class="ml-1"
+      (onClick)="onLogout()"
+      [disabled]="isButtonDisable()"
+    >
+      <i pButtonIcon class="pi pi-sign-out"></i>
+      <span pButtonLabel class="max-sm:hidden">Cerrar sesión</span>
+    </p-button>
+  }
+</div>

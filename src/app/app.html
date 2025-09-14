@@ -1,1 +1,8 @@
-<router-outlet />
+@if (isChecking()) {
+  <div class="h-screen w-screen">
+    <app-spinner />
+  </div>
+} @else {
+  <router-outlet />
+}
+<p-toast position="top-center" class="max-sm:w-[90%]" />

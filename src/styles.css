@@ -3,3 +3,19 @@
 @custom-variant dark (&:where(.dark-theme, .dark-theme *));
 
 @import "primeicons/primeicons.css";
+
+.p-password input {
+  width: 100%;
+  flex-grow: 1;
+}
+
+.p-inputmask input {
+  width: 100%;
+  flex-grow: 1;
+}
+
+.p-datepicker input {
+  width: 100%;
+  flex-grow: 1;
+}
+

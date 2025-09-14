@@ -1,7 +1,9 @@
 <p-button
+  rounded
+  severity="secondary"
+  text
   [icon]="'pi ' + icon()"
+  [pTooltip]="'Tema ' + nextThemeLabel()"
+  tooltipPosition="left"
   (onClick)="toggleTheme()"
-  [pTooltip]="'Tema ' + tooltip()"
-  tooltipPosition="bottom"
-  rounded="true"
 />

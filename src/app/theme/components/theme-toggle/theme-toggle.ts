@@ -15,7 +15,7 @@ export class ThemeToggle {
   private readonly theme = inject(Theme);
 
   protected readonly icon = computed(() => (this.theme.isDark() ? 'pi-sun' : 'pi-moon'));
-  protected readonly tooltip = computed(() => (this.theme.isDark() ? 'Claro' : 'Oscuro'));
+  protected readonly nextThemeLabel = computed(() => (this.theme.isDark() ? 'Claro' : 'Oscuro'));
 
   public toggleTheme(): void {
     this.theme.toggle();

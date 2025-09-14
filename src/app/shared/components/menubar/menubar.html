@@ -1,0 +1,25 @@
+<p-menubar class="rounded-none md:rounded-xl border-none md:px-5">
+  <ng-template #start>
+    <div class="flex flex-row items-center">
+      <p-button
+        rounded
+        severity="secondary"
+        text
+        class="animate-fadein animate-duration-700 md:hidden mr-3"
+        icon="pi pi-bars"
+        (onClick)="show.emit()"
+      />
+      <div class="flex flex-row items-center font-bold cursor-pointer" routerLink="/home">
+        <span class="md:text-2xl animate-fadeindown animate-duration-700">EAT</span>
+        <span class="max-sm:text-xs animate-fadein animate-duration-700">AND</span>
+        <span class="md:text-2xl animate-fadeinup animate-duration-700">SLEEP</span>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #end>
+    <div class="flex flex-row items-center animate-fadein animate-duration-700">
+      <app-theme-toggle />
+      <app-auth-options class="text-current" />
+    </div>
+  </ng-template>
+</p-menubar>
