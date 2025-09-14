@@ -10,10 +10,9 @@ import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { MessageModule } from 'primeng/message';
 
-import { Auth } from '../../services/auth';
-import { MessageService } from 'primeng/api';
-import { Customer } from 'src/app/customer/services/customer';
-import { switchMap } from 'rxjs';
+import { ToastService } from 'src/app/shared/services/toast-service';
+import { AuthFacade } from '../../facades/auth-facade';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login-page',
@@ -33,9 +32,8 @@ import { switchMap } from 'rxjs';
 export default class LoginPage {
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly router = inject(Router);
-  private readonly messageService = inject(MessageService);
-  private readonly auth = inject(Auth);
-  private readonly customer = inject(Customer);
+  private readonly toastService = inject(ToastService);
+  private readonly authFacade = inject(AuthFacade);
 
   private readonly _isButtonDisable = signal(false);
 
@@ -46,6 +44,30 @@ export default class LoginPage {
     password: this.formBuilder.control('', [Validators.required]),
   });
 
+  private login() {
+    this._isButtonDisable.set(true);
+    const body = this.loginForm.getRawValue();
+    this.authFacade
+      .loginAndGetInfo(body)
+      .pipe(finalize(() => this._isButtonDisable.set(false)))
+      .subscribe({
+        next: (value) => {
+          if (!value) {
+            this.toastService.showToast(
+              'error',
+              'No se puedo recuperar la informacion del usuario',
+            );
+            return;
+          }
+          this.router.navigateByUrl('/', { replaceUrl: true });
+          this.toastService.showToast('success', 'Bienvenido!!!');
+        },
+        error: (error: HttpErrorResponse) => {
+          this.toastService.showToast('error', error.error['detail']);
+        },
+      });
+  }
+
   public isInvalid(controlName: string) {
     const control = this.loginForm.get(controlName);
     return control?.invalid && control.touched;
@@ -53,33 +75,10 @@ export default class LoginPage {
 
   public onLogin(): void {
     if (this.loginForm.invalid) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Llena correctamente el formulario',
-      });
+      this.toastService.showToast('error', 'Llena correctamente el formulario');
       this.loginForm.markAllAsTouched();
       return;
     }
-    this._isButtonDisable.set(true);
-    const { email, password } = this.loginForm.getRawValue();
-    this.auth
-      .login(email, password)
-      .pipe(switchMap((userAccount) => this.customer.gerCustomerInfo(userAccount.id)))
-      .subscribe({
-        next: () => {
-          this.router.navigateByUrl('/', { replaceUrl: true });
-        },
-        error: (error: HttpErrorResponse) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.error['detail'],
-          });
-        },
-        complete: () => {
-          this._isButtonDisable.set(false);
-        },
-      });
+    this.login();
   }
 }

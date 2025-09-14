@@ -22,7 +22,7 @@
       </div>
       <div class="flex flex-col gap-2 max-sm:portrait:col-span-12 col-span-4">
         <label for="birthDate" [ngClass]="{ 'text-red-500': isInvalid('birthDate') }"
-          >Nacimiento</label
+          >Fecha de nacimiento</label
         >
         <p-datepicker
           [showIcon]="true"
@@ -55,7 +55,7 @@
       </div>
       <div class="flex flex-col gap-2 max-sm:portrait:col-span-12 col-span-4">
         <label for="phoneNumber" [ngClass]="{ 'text-red-500': isInvalid('phoneNumber') }"
-          >Telefono</label
+          >Teléfono</label
         >
         <p-inputmask
           mask="9999-9999"
@@ -104,19 +104,19 @@
       </div>
       <div class="flex flex-col gap-2 max-sm:portrait:col-span-12 col-span-4">
         <label for="confirmPassword" [ngClass]="{ 'text-red-500': isPasswordMismatch() }">
-          Confirmar</label
+          Confirma tu contraseña</label
         >
         <p-password
           inputId="confirmPassword"
           [feedback]="false"
           toggleMask
           placeholder="••••••••"
-          formControlName="confirm"
+          formControlName="confirmPassword"
           [invalid]="isPasswordMismatch()"
         />
         @if (isPasswordMismatch()) {
           <p-message severity="error" size="small" variant="simple">
-            Las contraseñas no coincicedn
+            Las contraseñas no coinciden
           </p-message>
         }
       </div>

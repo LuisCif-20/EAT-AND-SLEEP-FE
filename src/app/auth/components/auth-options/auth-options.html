@@ -1,5 +1,5 @@
 <div class="flex flex-row items-center">
-  @if (!userAccount()) {
+  @if (isNotAuthenticated()) {
     <a pButton severity="secondary" text rounded class="ml-1" routerLink="/auth">
       <i pButtonIcon class="pi pi-sign-in"></i>
       <span pButtonLabel class="max-sm:hidden">Iniciar sesión</span>
@@ -10,9 +10,9 @@
     </a>
   } @else {
     <a pButton severity="secondary" text rounded class="ml-1" routerLink="/profile">
-      @if (userAccount()!.avatar) {
+      @if (avatar()) {
         <div class="relative rounded-full h-[32px] w-[32px] overflow-hidden">
-          <img [ngSrc]="userAccount()!.avatar! | imageUrl" alt="Avatar" fill />
+          <img [ngSrc]="avatar()! | imageUrl" alt="Avatar" fill />
         </div>
       } @else {
         <i pButtonIcon class="pi pi-user"></i>

@@ -4,9 +4,7 @@ export enum AuthStatus {
   NOT_AUTHENTICATED,
 }
 
-export interface UserAccount {
-  id: string;
+export interface LoginData {
   email: string;
-  role: string;
-  avatar: string | null;
+  password: string;
 }

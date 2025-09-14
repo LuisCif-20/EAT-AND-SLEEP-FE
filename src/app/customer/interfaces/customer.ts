@@ -1,4 +1,4 @@
-export interface RegisterData {
+export interface NewCustomer {
   name: string;
   birthDate: string;
   nit: string;
@@ -14,4 +14,9 @@ export interface Customer {
   birthDate: Date;
   nit: string;
   phoneNumber: string;
+}
+
+export interface CustomerQueryParams {
+  userAccountId?: string;
+  nit?: string;
 }

@@ -12,12 +12,10 @@ import { PasswordModule } from 'primeng/password';
 import { MessageModule } from 'primeng/message';
 
 import { isFieldOneEqualsFieldTwo } from 'src/app/shared/validators/custom-validator';
-import { MessageService } from 'primeng/api';
-import { Auth } from '../../services/auth';
-import { Customer } from 'src/app/customer/services/customer';
-import { switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RegisterData } from 'src/app/customer/interfaces/customer.interface';
+import { ToastService } from 'src/app/shared/services/toast-service';
+import { AuthFacade } from '../../facades/auth-facade';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register-page',
@@ -39,9 +37,8 @@ import { RegisterData } from 'src/app/customer/interfaces/customer.interface';
 export default class RegisterPage {
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly router = inject(Router);
-  private readonly messageService = inject(MessageService);
-  private readonly auth = inject(Auth);
-  private readonly customer = inject(Customer);
+  private readonly toastService = inject(ToastService);
+  private readonly authFacade = inject(AuthFacade);
 
   private readonly _isButtonDisable = signal(false);
 
@@ -56,12 +53,36 @@ export default class RegisterPage {
       phoneNumber: this.formBuilder.control('', [Validators.required]),
       email: this.formBuilder.control('', [Validators.required]),
       password: this.formBuilder.control('', [Validators.required]),
-      confirm: this.formBuilder.control(''),
+      confirmPassword: this.formBuilder.control(''),
     },
     {
-      validators: [isFieldOneEqualsFieldTwo('password', 'confirm')],
+      validators: [isFieldOneEqualsFieldTwo('password', 'confirmPassword')],
     },
   );
+
+  private register() {
+    this._isButtonDisable.set(true);
+    const { confirmPassword: _, ...body } = this.registerForm.getRawValue();
+    this.authFacade
+      .registerAndLogin(body)
+      .pipe(finalize(() => this._isButtonDisable.set(false)))
+      .subscribe({
+        next: (value) => {
+          if (!value) {
+            this.toastService.showToast(
+              'error',
+              'No se puedo recuperar la informacion del usuario',
+            );
+            return;
+          }
+          this.router.navigateByUrl('/', { replaceUrl: true });
+          this.toastService.showToast('success', 'Bienvenido!!!');
+        },
+        error: (error: HttpErrorResponse) => {
+          this.toastService.showToast('error', error.error['detail']);
+        },
+      });
+  }
 
   public isInvalid(controlName: string) {
     const control = this.registerForm.get(controlName);
@@ -69,48 +90,16 @@ export default class RegisterPage {
   }
 
   public isPasswordMismatch() {
-    const control = this.registerForm.get('confirm');
+    const control = this.registerForm.get('confirmPassword');
     return this.registerForm.hasError('passwordsMismatch') && control?.touched;
-  }
-
-  public registerAndLogin(body: RegisterData) {
-    return this.customer
-      .register(body)
-      .pipe(
-        switchMap(() =>
-          this.auth
-            .login(body.email, body.password)
-            .pipe(switchMap((userAccount) => this.customer.gerCustomerInfo(userAccount.id))),
-        ),
-      );
   }
 
   public onRegister() {
     if (this.registerForm.invalid) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Llena correctamente el formulario',
-      });
+      this.toastService.showToast('error', 'Llena correctamente el formulario');
       this.registerForm.markAllAsTouched();
       return;
     }
-    this._isButtonDisable.set(true);
-    const body = this.registerForm.getRawValue() as RegisterData;
-    this.registerAndLogin(body).subscribe({
-      next: () => {
-        this.router.navigateByUrl('/', { replaceUrl: true });
-      },
-      error: (error: HttpErrorResponse) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.error['detail'],
-        });
-      },
-      complete: () => {
-        this._isButtonDisable.set(false);
-      },
-    });
+    this.register();
   }
 }

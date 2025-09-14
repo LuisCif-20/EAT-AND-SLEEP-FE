@@ -3,7 +3,7 @@ import { computed, Injectable, signal } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class Theme {
+export class ThemeService {
   private readonly htmlElement = document.documentElement;
   private readonly darkClass = 'dark-theme';
 

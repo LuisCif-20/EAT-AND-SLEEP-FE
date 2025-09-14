@@ -1,14 +1,16 @@
 import { HttpErrorResponse, HttpInterceptorFn, HttpStatusCode } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Auth } from '../services/auth';
 import { catchError, switchMap, throwError } from 'rxjs';
+import { AuthFacade } from '../facades/auth-facade';
+import { AuthState } from '../state/auth-state';
 
 export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
-  const auth = inject(Auth);
+  const authState = inject(AuthState);
+  const authFacade = inject(AuthFacade);
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === HttpStatusCode.Unauthorized && auth.accessToken()) {
-        return auth.refreshToken().pipe(
+      if (error.status === HttpStatusCode.Unauthorized && authState.accessToken()) {
+        return authFacade.refreshTokenOrLogout().pipe(
           switchMap(() => {
             const newReq = req.clone();
             return next(newReq);

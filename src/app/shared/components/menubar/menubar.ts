@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { MenubarModule } from 'primeng/menubar';
@@ -7,7 +7,6 @@ import { CardModule } from 'primeng/card';
 
 import { ThemeToggle } from '../../../theme/components/theme-toggle/theme-toggle';
 import { AuthOptions } from '../../../auth/components/auth-options/auth-options';
-import { Auth } from '../../../auth/services/auth';
 
 @Component({
   selector: 'app-menubar',
@@ -16,7 +15,5 @@ import { Auth } from '../../../auth/services/auth';
   styles: ``,
 })
 export class Menubar {
-  private readonly auth = inject(Auth);
-
   public readonly show = output();
 }
