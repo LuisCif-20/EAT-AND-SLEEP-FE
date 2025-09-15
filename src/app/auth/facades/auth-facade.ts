@@ -3,7 +3,7 @@ import { AuthService } from '../services/auth-service';
 import { UserAccountService } from '../services/user-account-service';
 import { CustomerService } from 'src/app/customer/services/customer-service';
 import { AuthState } from '../state/auth-state';
-import { catchError, map, switchMap, tap, throwError } from 'rxjs';
+import { catchError, finalize, map, of, switchMap, tap, throwError } from 'rxjs';
 import { AuthStatus, LoginData } from '../interfaces/auth';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { NewCustomer } from 'src/app/customer/interfaces/customer';
@@ -25,6 +25,7 @@ export class AuthFacade {
       }),
       map((customers) => {
         if (customers.length === 0) {
+          this.authState.clear();
           return false;
         }
         this.authState.setAuthCustomer(customers[0]);
@@ -57,17 +58,22 @@ export class AuthFacade {
       tap(({ accessToken }) => this.authState.setAccessToken(accessToken)),
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.Unauthorized) return this.logoutAndClear();
-        this.authState.setAuthStatus(AuthStatus.NOT_AUTHENTICATED);
         return throwError(() => error);
       }),
     );
   }
 
   public logoutAndClear() {
-    return this.authService.logout().pipe(tap(() => this.authState.clear()));
+    return this.authService.logout().pipe(finalize(() => this.authState.clear()));
   }
 
   public checkAuth() {
-    return this.refreshTokenOrLogout().pipe(switchMap(() => this.loadUserInfo()));
+    return this.refreshTokenOrLogout().pipe(
+      switchMap(() => this.loadUserInfo()),
+      catchError(() => {
+        this.authState.setAuthStatus(AuthStatus.NOT_AUTHENTICATED);
+        return of(false);
+      }),
+    );
   }
 }

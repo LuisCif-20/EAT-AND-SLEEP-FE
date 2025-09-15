@@ -1,6 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthState } from '../state/auth-state';
+import { AuthState } from '../../auth/state/auth-state';
 
 export const addAccessTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authSate = inject(AuthState);

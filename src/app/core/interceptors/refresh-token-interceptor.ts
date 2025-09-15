@@ -1,8 +1,8 @@
 import { HttpErrorResponse, HttpInterceptorFn, HttpStatusCode } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, switchMap, throwError } from 'rxjs';
-import { AuthFacade } from '../facades/auth-facade';
-import { AuthState } from '../state/auth-state';
+import { AuthFacade } from '../../auth/facades/auth-facade';
+import { AuthState } from '../../auth/state/auth-state';
 
 export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authState = inject(AuthState);

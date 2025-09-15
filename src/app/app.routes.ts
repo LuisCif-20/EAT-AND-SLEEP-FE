@@ -1,9 +1,12 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './shared/layouts/main-layout/main-layout';
+import { publicRoutesGuard } from './core/guards/public-routes-guard';
+import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
   {
     path: 'auth',
+    canMatch: [publicRoutesGuard],
     loadChildren: () => import('./auth/auth.routes'),
   },
   {
@@ -17,6 +20,11 @@ export const routes: Routes = [
       {
         path: 'home',
         loadComponent: () => import('./shared/pages/home-page/home-page'),
+      },
+      {
+        path: 'profile',
+        canMatch: [authGuard],
+        loadComponent: () => import('./shared/pages/profile-page/profile-page'),
       },
       {
         path: '',

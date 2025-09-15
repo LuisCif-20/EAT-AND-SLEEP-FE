@@ -1,12 +1,12 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { finalize } from 'rxjs';
 
 import { ToastModule } from 'primeng/toast';
 
 import { ThemeService } from './theme/services/theme-service';
-import { AuthFacade } from './auth/facades/auth-facade';
 import { Spinner } from './shared/components/spinner/spinner';
+import { AuthState } from './auth/state/auth-state';
+import { AuthStatus } from './auth/interfaces/auth';
 
 @Component({
   selector: 'app-root',
@@ -14,18 +14,11 @@ import { Spinner } from './shared/components/spinner/spinner';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements OnInit {
+export class App {
   private readonly theme = inject(ThemeService);
-  private readonly authFacade = inject(AuthFacade);
+  private readonly authState = inject(AuthState);
 
-  private readonly _isLoading = signal(true);
-
-  protected readonly isLoading = computed(() => this._isLoading());
-
-  ngOnInit(): void {
-    this.authFacade
-      .checkAuth()
-      .pipe(finalize(() => this._isLoading.set(false)))
-      .subscribe();
-  }
+  protected readonly isChecking = computed(
+    () => this.authState.authStatus() === AuthStatus.CHECKING,
+  );
 }
