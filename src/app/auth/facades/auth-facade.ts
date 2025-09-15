@@ -76,4 +76,13 @@ export class AuthFacade {
       }),
     );
   }
+
+  public updateUserAccountAndLoadNewInfo(body: FormData) {
+    return this.userAccountService.updateUserAccountInfo(body).pipe(
+      switchMap(() => this.userAccountService.getUserAccountInfo()),
+      map((userAccount) => {
+        this.authState.setUserAccount(userAccount);
+      }),
+    );
+  }
 }

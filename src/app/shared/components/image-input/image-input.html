@@ -1,0 +1,19 @@
+<div class="flex flex-col">
+  <div class="relative aspect-square overflow-hidden rounded-xl flex items-center justify-center">
+    @if (url() && !imageUrl()) {
+      <img [ngSrc]="url()! | imageUrl" alt="Avatar" class="object-cover" fill priority />
+    } @else if (imageUrl()) {
+      <img [src]="imageUrl()!" alt="Avatar" class="object-cover" fill priority />
+    } @else {
+      <span class="">No tienes un avatar establecido...</span>
+    }
+  </div>
+  <p-fileupload
+    mode="basic"
+    chooseLabel="Selecciona..."
+    chooseIcon="pi pi-upload"
+    accept="image/*"
+    class="pt-5"
+    (onSelect)="onSelect($event)"
+  />
+</div>

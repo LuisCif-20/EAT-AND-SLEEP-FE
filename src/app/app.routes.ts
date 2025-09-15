@@ -27,6 +27,11 @@ export const routes: Routes = [
         loadComponent: () => import('./shared/pages/profile-page/profile-page'),
       },
       {
+        path: 'edit-profile',
+        canMatch: [authGuard],
+        loadComponent: () => import('./shared/pages/edit-profile-page/edit-profile-page'),
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: 'home',

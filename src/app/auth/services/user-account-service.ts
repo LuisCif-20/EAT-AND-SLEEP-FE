@@ -15,4 +15,9 @@ export class UserAccountService {
     const url = `${this.baseUrl}/me`;
     return this.httpClient.get<UserAccount>(url);
   }
+
+  public updateUserAccountInfo(body: FormData) {
+    const url = `${this.baseUrl}`;
+    return this.httpClient.patch<void>(url, body);
+  }
 }

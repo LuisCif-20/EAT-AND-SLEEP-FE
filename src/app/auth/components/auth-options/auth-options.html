@@ -10,9 +10,15 @@
     </a>
   } @else {
     <a pButton severity="secondary" text rounded class="ml-1" routerLink="/profile">
-      @if (avatar()) {
-        <div class="relative rounded-full h-[32px] w-[32px] overflow-hidden">
-          <img [ngSrc]="avatar()! | imageUrl" alt="Avatar" fill />
+      @if (userAccount() && userAccount()!.avatar) {
+        <div class="relative rounded-full w-[32px] h-[32px] overflow-hidden">
+          <img
+            [ngSrc]="userAccount()!.avatar! | imageUrl"
+            alt="Avatar"
+            class="object-cover"
+            fill
+            priority
+          />
         </div>
       } @else {
         <i pButtonIcon class="pi pi-user"></i>

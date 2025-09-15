@@ -1,1 +1,58 @@
-<p>profile-page works!</p>
+<div class="h-full w-full flex flex-col">
+  <div class="grid grid-cols-4">
+    <div
+      class="max-sm:col-span-4 col-span-1 rounded-xl bg-surface-0 dark:bg-surface-900 p-5 flex flex-col mb-3"
+    >
+      <h2 class="text-2xl mb-3 font-bold mx-auto">Avatar</h2>
+      <div
+        class="relative aspect-square overflow-hidden rounded-xl flex items-center justify-center"
+      >
+        @if (userAccount()!.avatar) {
+          <img
+            [ngSrc]="userAccount()!.avatar! | imageUrl"
+            alt="Avatar"
+            class="object-cover"
+            fill
+            priority
+          />
+        } @else {
+          <span class="">No tienes un avatar establecido...</span>
+        }
+      </div>
+    </div>
+    <div
+      class="max-sm:col-span-4 col-span-2 rounded-xl dark:bg-surface-900 max-sm:portrait:ml-0 ml-3 p-5 flex flex-col mb-3"
+    >
+      <h2 class="text-2xl mb-3 font-bold mx-auto">Informacion</h2>
+      <div class="flex flex-col w-full h-full justify-center">
+        <span class="text-lg"
+          ><span class="font-bold">Email: </span>{{ userAccount()!.email }}</span
+        >
+        <span class="text-lg"
+          ><span class="font-bold">Nombre: </span>{{ authCustomer()!.name }}</span
+        >
+        <span class="text-lg"
+          ><span class="font-bold">NIT: </span>{{ authCustomer()!.nit | nit }}</span
+        >
+        <span class="text-lg"
+          ><span class="font-bold">Numero de Telefono: </span
+          >{{ authCustomer()!.phoneNumber | phoneNumber }}</span
+        >
+      </div>
+    </div>
+    <div
+      class="max-sm:col-span-4 col-span-1 rounded-xl dark:bg-surface-900 max-sm:portrait:ml-0 ml-3 p-5 flex flex-col mb-3"
+    >
+      <h2 class="text-2xl mb-3 font-bold mx-auto">Acciones</h2>
+      <div class="flex w-full h-full justify-center items-center">
+        <p-button
+          severity="help"
+          icon="pi pi-pencil"
+          label="Editar"
+          rounded
+          routerLink="/edit-profile"
+        />
+      </div>
+    </div>
+  </div>
+</div>

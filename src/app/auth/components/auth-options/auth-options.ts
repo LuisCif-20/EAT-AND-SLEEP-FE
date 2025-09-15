@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ImageUrlPipe } from 'src/app/shared/pipes/image-url-pipe';
 import { NgOptimizedImage } from '@angular/common';
 import { AuthFacade } from '../../facades/auth-facade';
@@ -18,6 +18,7 @@ import { ToastService } from 'src/app/shared/services/toast-service';
   styles: ``,
 })
 export class AuthOptions {
+  private readonly router = inject(Router);
   private readonly authFacade = inject(AuthFacade);
   private readonly authState = inject(AuthState);
   private readonly toastService = inject(ToastService);
@@ -28,15 +29,19 @@ export class AuthOptions {
   protected readonly isNotAuthenticated = computed(
     () => this.authState.authStatus() === AuthStatus.NOT_AUTHENTICATED,
   );
-  protected readonly avatar = computed(() => this.authState.userAccount()!.avatar);
+  protected readonly userAccount = computed(() => this.authState.userAccount());
 
   public onLogout() {
     this._isButtonDisable.set(true);
     this.authFacade
       .logoutAndClear()
-      .pipe(finalize(() => this._isButtonDisable.set(false)))
-      .subscribe({
-        complete: () => this.toastService.showToast('success', 'Hasta pronto!!!'),
-      });
+      .pipe(
+        finalize(() => {
+          this.toastService.showToast('success', 'Hasta pronto!!!');
+          this._isButtonDisable.set(false);
+          this.router.navigateByUrl('/', { replaceUrl: true });
+        }),
+      )
+      .subscribe();
   }
 }

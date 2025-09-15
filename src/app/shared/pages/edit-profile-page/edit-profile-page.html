@@ -1,0 +1,32 @@
+<div class="h-full w-full flex flex-col">
+  <div class="grid grid-cols-3">
+    <div class="max-sm:col-span-4 col-span-1 rounded-xl dark:bg-surface-900 p-5 mb-3">
+      <form
+        class="w-full h-auto flex flex-col"
+        [formGroup]="userAccountForm"
+        (ngSubmit)="updateUserAccount()"
+      >
+        <h2 class="text-2xl mb-3 font-bold mx-auto">Cuenta de Usuario</h2>
+        <app-image-input [url]="userAccount()!.avatar" (newUrl)="catchImage($event)" />
+        <div class="flex flex-col gap-2 mt-5">
+          <label for="email">Email</label>
+          <input
+            pInputText
+            type="text"
+            id="email"
+            placeholder="nick@example.com"
+            formControlName="email"
+          />
+        </div>
+        <p-button
+          class="mt-5 mx-auto"
+          label="Actualizar"
+          icon="pi pi-refresh"
+          severity="help"
+          [disabled]="isButtonDisabled()"
+          type="submit"
+        />
+      </form>
+    </div>
+  </div>
+</div>
